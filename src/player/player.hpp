@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include "godot_cpp/classes/character_body2d.hpp"
-#include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
 
 namespace godot {
@@ -12,7 +11,6 @@ class Player: public CharacterBody2D {
 
 private:
 	double speed = 600.0;
-	Sprite2D *sprite = nullptr;
 
 protected:
 	static void _bind_methods();
@@ -22,7 +20,6 @@ public:
 	~Player();
 
 	void _physics_process(double delta) override;
-	void _ready() override;
 };
 }
 
