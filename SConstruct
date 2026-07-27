@@ -5,8 +5,8 @@ import sys
 from methods import print_error
 
 
-libname = "gdextensionlib"
-projectdir = "project"
+libname = "EXTENSION-NAME"
+projectdir = "game-project"
 
 localEnv = Environment(tools=["default"], PLATFORM="")
 
