@@ -20,3 +20,29 @@ create a copy of this repository with a clean git history. log in to GitHub and 
 - change the name of the compiled library file inside the [SConstruct](https://github.com/zenksoo/custom-gdcpp-template/blob/master/SConstruct) file by modifying the libname string.
 
     - change the paths of the to be loaded library name inside the [game-project/bin/example.gdextension](https://github.com/zenksoo/custom-gdcpp-template/blob/master/game-project/bin/example.gdextension) file, by replacing EXTENSION-NAME with the name you chose for libname.
+
+- change the entry_symbol string inside [project/bin/example.gdextension](https://github.com/zenksoo/custom-gdcpp-template/blob/master/game-project/bin/example.gdextension) file.
+
+    - rename the example_library_init function in [src/register_types.cpp](https://github.com/zenksoo/custom-gdcpp-template/blob/master/src/register_types.cpp) to the same name you chose for entry_symbol.
+
+change the name of the `project/bin/example.gdextension` file
+
+
+Now, you can build the project with the following command at root directory:
+
+```
+scons
+```
+
+Configuring an IDE
+
+You can develop your own extension with any text editor and by invoking scons on the command line, but if you want to work with an IDE (Integrated Development Environment), you can use a compilation database file called compile_commands.json. Most IDEs should automatically identify this file, and self-configure appropriately. To generate the database file, you can run one of the following commands in the project root directory:
+
+```shell
+# Generate compile_commands.json while compiling
+scons compiledb=yes
+```
+```shell
+# Generate compile_commands.json without compiling
+scons compiledb=yes compile_commands.json
+```
