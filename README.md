@@ -34,7 +34,7 @@ Now, you can build the project with the following command at root directory:
 scons
 ```
 
-Configuring an IDE
+## Configuring an IDE
 
 You can develop your own extension with any text editor and by invoking scons on the command line, but if you want to work with an IDE (Integrated Development Environment), you can use a compilation database file called compile_commands.json. Most IDEs should automatically identify this file, and self-configure appropriately. To generate the database file, you can run one of the following commands in the project root directory:
 
