@@ -30,9 +30,11 @@ change the name of the `project/bin/example.gdextension` file
 
 Now, you can build the project with the following command at root directory:
 
-```
+```shell
 scons
 ```
+
+- Import the game project into Godot Engine, open the player scene, and run it, you'll have a player with top-down movement ready to go
 
 ## Configuring an IDE
 
