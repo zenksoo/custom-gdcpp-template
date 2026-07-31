@@ -56,16 +56,20 @@ CXXFLAGS := -std=c++17 -fPIC -Isrc \
 $(TARGET_LIB): $(OBJ) $(HEADERS)
 	mkdir -p $(TARGET_DIR)
 	$(CXX) -shared -o $@ $(OBJ) $(GODOT_CPP_LIB)
-	$(GODOT) --path game-project
 
 
 help:
 	@echo "Available targets:"
+	@echo "  make run        Run the Godot main scene"
 	@echo "  make lib        Build the godot-cpp static library"
 	@echo "  make compiledb  Generate compile_commands.json for clangd"
 	@echo "  make            Build your game module (default target)"
 	@echo "  make clean      Remove build artifacts (.o/.d)"
 	@echo "  make distclean  Deep clean, including orphaned files"
+
+
+run:
+	$(GODOT) --path game-project
 
 
 lib:
