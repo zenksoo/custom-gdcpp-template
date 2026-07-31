@@ -12,12 +12,13 @@ customized for my own workflow.
 - Version-switch notes for pinning the submodule to a specific Godot release
 
 ## Usage - Template
-create a copy of this repository with a clean git history. log in to GitHub and click the green "Use this template" button at the top of the repository page.
+Create a copy of this repository with a clean git history. Log in to GitHub and click the green "Use this template" button at the top of the repository page.
+
 
 - clone your repository to your local computer
-- initialize the godot-cpp git submodule via git submodule update --init
+- initialize the godot-cpp git submodule via `git submodule update --init`
 
-- change the name of the compiled library file inside the [SConstruct](https://github.com/zenksoo/custom-gdcpp-template/blob/master/SConstruct) file by modifying the libname string.
+- change the name of the compiled library file inside the [Makefile](https://github.com/zenksoo/custom-gdcpp-template/blob/master/Makefile) file by modifying the LIB_NAME string.
 
     - change the paths of the to be loaded library name inside the [game-project/bin/example.gdextension](https://github.com/zenksoo/custom-gdcpp-template/blob/master/game-project/bin/example.gdextension) file, by replacing EXTENSION-NAME with the name you chose for libname.
 
@@ -28,23 +29,52 @@ create a copy of this repository with a clean git history. log in to GitHub and 
 change the name of the `project/bin/example.gdextension` file
 
 
-Now, you can build the project with the following command at root directory:
+### Building
 
-```shell
-scons
+This project uses a `Makefile` on top of godot-cpp's SCons build — SCons builds the godot-cpp static library and generates the compile database; Make compiles and links your own game module against it.
+
+Build everything from the project root:
+
+```bash
+make lib          # builds the godot-cpp static library + compile_commands.json
+make               # compiles src/ and links the final shared library
 ```
 
-- Import the game project into Godot Engine, open the player scene, and run it, you'll have a player with top-down movement ready to go
+Or in one go:
+```bash
+make lib && make
+```
+
+Other available commands:
+
+| Command | Description |
+|---|---|
+| `make lib` | Build the godot-cpp static library (`use_hot_reload=yes`) and regenerate `compile_commands.json` for clangd |
+| `make` | Compile your `src/` sources and link the final `.so`/`.dll` |
+| `make run` | Launch the project's main scene via the Godot binary |
+| `make run-headless` | Launch headless — useful for a quick load/crash smoke-test |
+| `make clean` | Remove `.o`/`.d` build artifacts |
+| `make distclean` | Deep clean, including any orphaned build files |
+| `make help` | List all available targets |
+
+Override the build target/platform if needed:
+```bash
+make lib TARGET=template_release
+```
+
+### Running
+
+* Import the game project into Godot Engine, open the player scene, and run it — you'll have a player with top-down movement ready to go.
+* Alternatively, run `make run` from the terminal once the library is built.
 
 ## Configuring an IDE
 
-You can develop your own extension with any text editor and by invoking scons on the command line, but if you want to work with an IDE (Integrated Development Environment), you can use a compilation database file called compile_commands.json. Most IDEs should automatically identify this file, and self-configure appropriately. To generate the database file, you can run one of the following commands in the project root directory:
+You can develop your own extension with any text editor and by invoking scons on the command line, but if you want to work with an IDE (Integrated Development Environment), you can use a compilation database file called compile_commands.json. Most IDEs should automatically identify this file, and self-configure appropriately. To generate the database file, you can run  the following command in the project root directory:
 
 ```shell
-# Generate compile_commands.json while compiling
-scons compiledb=yes
+# Generate compile_commands.json
+make compiledb
 ```
-```shell
-# Generate compile_commands.json without compiling
-scons compiledb=yes compile_commands.json
-```
+
+and then `CTRL+SHIFT+P` and search for `>clangd: Restart language server` and press `Enter`
+
