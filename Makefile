@@ -1,4 +1,7 @@
-# --- Detect platform ---
+# path to u excutable godot engine in u computer
+GODOT = $(HOME)/zenkso/apps/godot/Godot_v4.7-stable_linux.x86_64
+
+# Detect platform
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
     PLATFORM := linux
@@ -7,7 +10,7 @@ ifeq ($(UNAME_S),Darwin)
     PLATFORM := macos
 endif
 
-# Windows via MSYS/MinGW reports differently — adjust if you ever build there
+# Windows via MSYS/MinGW reports differently, adjust if you ever build there
 ifneq (,$(findstring MINGW,$(UNAME_S)))
     PLATFORM := windows
 endif
@@ -53,6 +56,8 @@ CXXFLAGS := -std=c++17 -fPIC -Isrc \
 $(TARGET_LIB): $(OBJ) $(HEADERS)
 	mkdir -p $(TARGET_DIR)
 	$(CXX) -shared -o $@ $(OBJ) $(GODOT_CPP_LIB)
+	$(GODOT) --path game-project
+
 
 help:
 	@echo "Available targets:"
