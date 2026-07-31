@@ -1,7 +1,5 @@
-# path to u excutable godot engine in u computer
-GODOT = $(HOME)/zenkso/apps/godot/Godot_v4.7-stable_linux.x86_64
-
 # Detect platform
+# ============================================
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
     PLATFORM := linux
@@ -27,9 +25,19 @@ endif
 ifeq ($(UNAME_M),arm64)
     ARCH := arm64
 endif
+# ============================================
+
+# path to u excutable godot engine in u computer
+GODOT = $(HOME)/zenkso/apps/godot/Godot_v4.7-stable_linux.x86_64
 
 # buid target and u can override with `make TARGET=template_release`
 TARGET ?= template_debug
+
+GODOT_CPP_LIB := godot-cpp/bin/libgodot-cpp.$(PLATFORM).$(TARGET).$(ARCH).a
+
+LIB_NAME := EXTENSION-NAME
+TARGET_DIR := game-project/bin/$(PLATFORM)
+TARGET_LIB := $(TARGET_DIR)/lib$(LIB_NAME).$(PLATFORM).$(TARGET).$(ARCH).so
 
 SRC := $(shell find src -name '*.cpp')
 DEP := $(shell find src -type f -name '*.d')
@@ -37,26 +45,18 @@ HEADERS := $(shell find src -type f -name '*.hpp')
 
 OBJ := $(SRC:.cpp=.o)
 
-LIB_NAME := EXTENSION-NAME
-TARGET_DIR := game-project/bin/$(PLATFORM)
-TARGET_LIB := $(TARGET_DIR)/lib$(LIB_NAME).$(PLATFORM).$(TARGET).$(ARCH).so
-
-
-
-GODOT_CPP_LIB := godot-cpp/bin/libgodot-cpp.$(PLATFORM).$(TARGET).$(ARCH).a
-
 CXX := g++
 CXXFLAGS := -std=c++17 -fPIC -Isrc \
 			-Igodot-cpp/include \
 			-Igodot-cpp/gen/include \
 			-Igodot-cpp/gdextension \
 			-DHOT_RELOAD_ENABLED
+RM := rm -rf
 
 
 $(TARGET_LIB): $(OBJ) $(HEADERS)
 	mkdir -p $(TARGET_DIR)
 	$(CXX) -shared -o $@ $(OBJ) $(GODOT_CPP_LIB)
-
 
 help:
 	@echo "Available targets:"
@@ -67,21 +67,17 @@ help:
 	@echo "  make clean      Remove build artifacts (.o/.d)"
 	@echo "  make distclean  Deep clean, including orphaned files"
 
-
 run:
 	$(GODOT) --path game-project
-
 
 lib:
 	scons -C godot-cpp target=$(TARGET) platform=$(PLATFORM) compiledb=yes use_hot_reload=yes
 
-
 compiledb:
 	mv godot-cpp/compile_commands.json ./
 
-
 clean:
-	@rm -rf $(OBJ) $(DEP)
+	@$(RM) $(OBJ) $(DEP)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
