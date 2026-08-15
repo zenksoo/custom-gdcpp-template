@@ -52,9 +52,7 @@ Other available commands:
 | `make lib` | Build the godot-cpp static library (`use_hot_reload=yes`) and regenerate `compile_commands.json` for clangd |
 | `make` | Compile your `src/` sources and link the final `.so`/`.dll` |
 | `make run` | Launch the project's main scene via the Godot binary |
-| `make run-headless` | Launch headless — useful for a quick load/crash smoke-test |
 | `make clean` | Remove `.o`/`.d` build artifacts |
-| `make distclean` | Deep clean, including any orphaned build files |
 | `make help` | List all available targets |
 
 Override the build target/platform if needed:
